@@ -1,2 +1,0 @@
-org.nouari.repository.IDaoImpl
-org.nouari.service.IMetierImpl
