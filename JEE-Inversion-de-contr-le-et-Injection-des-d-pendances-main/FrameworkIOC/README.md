@@ -161,5 +161,3 @@ public class ContextAnn extends Context{
 }
 ````
 
-## 3. Démonstration du framework
-[Voir Projet TestFrameworkIOC](../TestFrameworkIOC/README.md)
