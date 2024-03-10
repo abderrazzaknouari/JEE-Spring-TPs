@@ -1,4 +1,4 @@
-# S4M1 : Architecture JEE & Middlewares
+#  S4: Architecture JEE & Middlewares
 
 ## Activité Pratique N° 1 - Inversion de contrôle et Injection des dépendances
 
