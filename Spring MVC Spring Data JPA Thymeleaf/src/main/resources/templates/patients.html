@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-2">
+        <div class="card p-2 justify-content-center">
+            <div class="card-title">
+                <h2>List of Patients</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group m-2 mb-3 row">
+                    <div class="col-sm-6">
+                        <form th:action="@{/patients}" method="get">
+                            <label for="keyword">Name</label>
+                            <input type="text" class="mt-2" id="keyword" name="keyword" th:value="${keyword}">
+                            <input type="submit" class="btn btn-success" value="Search">
+                        </form>
+                    </div>
+                    <div class="col-sm-6 mt-2">
+<!--                        <p class="text-center">-->
+<!--                            <a class="fw-bold link-offset-2 link-underline link-underline-opacity-0"-->
+<!--                            th:href="@{/patients/addForm}">-->
+<!--                                Add new Patient-->
+<!--                            </a>-->
+<!--                            <a class="link-offset-2 link-underline link-underline-opacity-0" href="#" id="showForm">-->
+<!--                                Add new Patient-->
+<!--                            </a>-->
+<!--                        </p>-->
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+                                Add new Patient
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${patients.isEmpty()}" class="alert alert-warning" role="alert">
+                    No patients found
+                </div>
+                <table th:if="${not patients.isEmpty()}" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Birth Day</th>
+                            <th scope="col">Sick</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="patient : ${patients}">
+                            <td th:text="${patient.name}"></td>
+                            <td th:text="${patient.score}"></td>
+                            <td th:text="${patient.birthDay}"></td>
+                            <td th:text="${patient.sick}"></td>
+                            <td>
+                                <a th:href="@{/patients/editForm(id=${patient.id},
+                                keyword=${keyword}, currentPage=${currentPage}
+                                 )}"
+                                   class="btn btn-primary">
+                                    Edit
+                                </a>
+                                <a th:href="@{/patients/delete(id=${patient.id},
+                                 keyword=${keyword} )}"
+                                   class="btn btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li th:class="${currentPage>1?'page-item':'page-item disabled'}">
+                            <a class="page-link" th:href="@{/patients(page=${currentPage-1},
+                             keyword=${keyword} )}"
+                               tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                            th:class="${currentPage==i?'page-item active':'page-item'}">
+                            <a class="page-link" th:href="@{/patients(page=${i}, keyword=${keyword})}" th:text="${i}"></a>
+                        </li>
+<!--                        <li class="page-item active" aria-current="page">-->
+<!--                            <a class="page-link" href="#">2</a>-->
+<!--                        </li>-->
+                        <li th:class="${currentPage<totalPages?'page-item':'page-item disabled'}">
+                            <a class="page-link" th:href="@{/patients(page=${currentPage+1}, keyword=${keyword}
+                             )}">
+                            Next
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!--        Start Adding Patient section -->
+        <!-- Modal -->
+        <div class="modal fade" id="addPatientModal" tabindex="-1" aria-labelledby="addPatientModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPatientModalLabel">Add new Patient</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <form th:action="@{/patients/add}" method="post">
+                            <input type="hidden" class="form-control" name="page">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="score" class="form-label">Score</label>
+                                <input type="number" class="form-control" id="score" name="score">
+                            </div>
+                            <div class="mb-3">
+                                <label for="birthDay" class="form-label">Birth Day</label>
+                                <input type="date" class="form-control" id="birthDay" name="birthDay">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="sick" name="sick">
+                                <label class="form-check-label" for="sick">Sick</label>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        End adding a patient section -->
+
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
